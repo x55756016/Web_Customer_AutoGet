@@ -5,12 +5,10 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Web.Script.Serialization;
 using System.Windows.Forms;
 using System.Xml;
 
@@ -48,6 +46,7 @@ namespace 会员管理
                 setCookie1();
                 setCookie2();
                 timer1.Interval = 3000;//3s
+                
             }
             catch (Exception ex)
             {
