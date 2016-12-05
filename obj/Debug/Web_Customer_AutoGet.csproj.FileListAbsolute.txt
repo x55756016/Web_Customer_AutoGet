@@ -1,0 +1,15 @@
+F:\MyProduct\会员管理\会员管理\bin\Debug\会员管理.exe
+F:\MyProduct\会员管理\会员管理\bin\Debug\Foundation.Log.dll
+F:\MyProduct\会员管理\会员管理\obj\Debug\会员管理.Form1.resources
+F:\MyProduct\会员管理\会员管理\obj\Debug\会员管理.Properties.Resources.resources
+F:\MyProduct\会员管理\会员管理\obj\Debug\Web_Customer_AutoGet.csproj.GenerateResource.Cache
+F:\MyProduct\会员管理\会员管理\obj\Debug\会员管理.exe
+F:\MyProduct\会员管理\会员管理\obj\Debug\会员管理.pdb
+F:\MyProduct\Web_Customer_AutoGet\bin\Debug\会员管理.exe
+F:\MyProduct\Web_Customer_AutoGet\bin\Debug\会员管理.pdb
+F:\MyProduct\Web_Customer_AutoGet\obj\Debug\Web_Customer_AutoGet.csprojResolveAssemblyReference.cache
+F:\MyProduct\Web_Customer_AutoGet\obj\Debug\会员管理.Form1.resources
+F:\MyProduct\Web_Customer_AutoGet\obj\Debug\会员管理.Properties.Resources.resources
+F:\MyProduct\Web_Customer_AutoGet\obj\Debug\Web_Customer_AutoGet.csproj.GenerateResource.Cache
+F:\MyProduct\Web_Customer_AutoGet\obj\Debug\会员管理.exe
+F:\MyProduct\Web_Customer_AutoGet\obj\Debug\会员管理.pdb
