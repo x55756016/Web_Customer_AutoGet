@@ -13,3 +13,4 @@ F:\MyProduct\Web_Customer_AutoGet\obj\Debug\会员管理.Properties.Resources.re
 F:\MyProduct\Web_Customer_AutoGet\obj\Debug\Web_Customer_AutoGet.csproj.GenerateResource.Cache
 F:\MyProduct\Web_Customer_AutoGet\obj\Debug\会员管理.exe
 F:\MyProduct\Web_Customer_AutoGet\obj\Debug\会员管理.pdb
+F:\MyProduct\Web_Customer_AutoGet\bin\Debug\会员管理.exe.config

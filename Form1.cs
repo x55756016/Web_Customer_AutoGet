@@ -128,74 +128,69 @@ namespace 会员管理
         /// 第三步 登录获取cooike_sesssionUser
         /// </summary>
         /// <returns></returns>
-        public string login()
+        public void login()
         {
             string strLogin = "http://portal.idcicp.com/login_center.aspx?action=login";
             strPostDate = "ref=&loginname=zwd312146008&loginpass=36916266&twopass=idcicp123topdatazwd312146008&logincode=" + textBox1.Text;
-            if (!string.IsNullOrEmpty(AdminToken))
+            
+            try
             {
-                return AdminToken;
+                //myRequest.CookieContainer.Add()
+
+                HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(strLogin);
+                myRequest.Method = "POST";
+                myRequest.ContentType = "application/x-www-form-urlencoded";
+                myRequest.AllowAutoRedirect = false;
+                Cookie ck1 = new Cookie("__cfduid", cookie_cfduid, "/", ".idcicp.com");
+                Cookie ck2 = new Cookie("ASP.NET_SessionId", cookie_AspNetSessionId, "/", ".idcicp.com");
+                Cookie ck3 = new Cookie("sessionCode_", cookie_SessionCode, "/", ".idcicp.com");
+
+                CookieCollection cks = new CookieCollection();
+                cks.Add(ck1);
+                cks.Add(ck2);
+                cks.Add(ck3);
+                myRequest.CookieContainer = new CookieContainer();
+                myRequest.CookieContainer.Add(cks);
+
+                string requestBody = strPostDate;
+
+                byte[] aryBuf = Encoding.UTF8.GetBytes(requestBody);
+                myRequest.ContentLength = aryBuf.Length;
+                using (Stream writer = myRequest.GetRequestStream())
+                {
+                    writer.Write(aryBuf, 0, aryBuf.Length);
+                    writer.Close();
+                    writer.Dispose();
+                }
+
+                HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse();
+                Stream responseStream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
+                string content = reader.ReadToEnd();
+                reader.Close();
+                responseStream.Close();
+
+
+
+                string CookieValue = response.Headers.Get("Set-Cookie");
+                if (CookieValue == null)
+                {
+                    MessageBox.Show("登录失败，请重新登录！");
+                    return;
+                }
+                string[] all = CookieValue.Split(';');
+                foreach (string s in all)
+                {
+                    if (s.Contains("sessionUser_"))
+                    {
+                        cookie_SessionUser = s.Split('=')[1];
+                    }
+
+                }
             }
-            else
+            catch (Exception ex)
             {
-                string strResult = "";
-
-                try
-                {
-                    //myRequest.CookieContainer.Add()
-
-                    HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(strLogin);
-                    myRequest.Method = "POST";
-                    myRequest.ContentType = "application/x-www-form-urlencoded";
-                    myRequest.AllowAutoRedirect = false;
-                    Cookie ck1 = new Cookie("__cfduid", cookie_cfduid, "/", ".idcicp.com");
-                    Cookie ck2 = new Cookie("ASP.NET_SessionId", cookie_AspNetSessionId, "/", ".idcicp.com");
-                    Cookie ck3 = new Cookie("sessionCode_", cookie_SessionCode, "/", ".idcicp.com");
-
-                    CookieCollection cks = new CookieCollection();
-                    cks.Add(ck1);
-                    cks.Add(ck2);
-                    cks.Add(ck3);
-                    myRequest.CookieContainer = new CookieContainer();
-                    myRequest.CookieContainer.Add(cks);
-
-                    string requestBody = strPostDate;
-
-                    byte[] aryBuf = Encoding.UTF8.GetBytes(requestBody);
-                    myRequest.ContentLength = aryBuf.Length;
-                    using (Stream writer = myRequest.GetRequestStream())
-                    {
-                        writer.Write(aryBuf, 0, aryBuf.Length);
-                        writer.Close();
-                        writer.Dispose();
-                    }
-
-                    HttpWebResponse response = (HttpWebResponse)myRequest.GetResponse();
-                    Stream responseStream = response.GetResponseStream();
-                    StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
-                    string content = reader.ReadToEnd();
-                    reader.Close();
-                    responseStream.Close();
-
-
-
-                    string CookieValue = response.Headers.Get("Set-Cookie");
-
-                    string[] all = CookieValue.Split(';');
-                    foreach (string s in all)
-                    {
-                        if (s.Contains("sessionUser_"))
-                        {
-                            cookie_SessionUser = s.Split('=')[1];
-                        }
-
-                    }
-                }
-                catch (Exception ex)
-                {
-                    log("环信GetAdminToken异常：" + ex.ToString());
-                }
-                return strResult;
+                log("环信GetAdminToken异常：" + ex.ToString());
             }
 
         }
@@ -314,6 +309,9 @@ namespace 会员管理
 
                 //strKefu = txtMoblie.Text;
 
+                string str = "已获取到最新用户列表信息";
+                log(str);
+
                 if (string.IsNullOrEmpty(strKefu))//没人认领的新用户，马上启动录入
                 {
                     log("发现新客户：" + strMobile + "开始添加客户");
@@ -336,17 +334,11 @@ namespace 会员管理
             {
                 log(ex.ToString());
             }
-            finally
-            {
-                string str= "已获取到最新用户列表信息";
-                log(str);
-                timer1.Start();
-            }
         }
 
         private void log(string str)
         {
-            if(txtMsg.Text.Length>=100)
+            if(txtMsg.Lines.Length>=20)
             {
                 txtMsg.Text = string.Empty;
             }
@@ -482,16 +474,17 @@ namespace 会员管理
         {
             log("开始获取最新注册用户信息，请稍等......");
             timer1.Stop();//先停止，待获取完成再启动
-            txtParmater.Text = "当前上下文参数：" + System.Environment.NewLine
+            txtParmater.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "当前上下文参数：" + System.Environment.NewLine
                 + "__cfduid =" + cookie_cfduid + System.Environment.NewLine
-                 + "ASP.NET_SessionId =" + cookie_AspNetSessionId + System.Environment.NewLine
-                  + "sessionCode_ =" + cookie_SessionCode + System.Environment.NewLine
-                   + "sessionUser_ =" + cookie_SessionUser + System.Environment.NewLine
-                    + cookie_ASPSESSIONIDName + "=" + cookie_ASPSESSIONIDValue + System.Environment.NewLine
-                     + "month_champion =" + cookie_month_champion;
+                + "ASP.NET_SessionId =" + cookie_AspNetSessionId + System.Environment.NewLine
+                + "sessionCode_ =" + cookie_SessionCode + System.Environment.NewLine
+                + "sessionUser_ =" + cookie_SessionUser + System.Environment.NewLine
+                + cookie_ASPSESSIONIDName + "=" + cookie_ASPSESSIONIDValue + System.Environment.NewLine
+                + "month_champion =" + cookie_month_champion;
 
 
             GetCustomerList();
+            timer1.Start();
         }
 
     }
