@@ -16,7 +16,7 @@ namespace 会员管理
 {
     public partial class Form1 : Form
     {
-        private static string AdminToken = string.Empty;
+        
         private string strPostDate = string.Empty;
         private string cookie_cfduid = string.Empty;
         private string cookie_AspNetSessionId = string.Empty;
@@ -31,8 +31,6 @@ namespace 会员管理
         private string cookie_ASPSESSIONIDName = string.Empty;
         private string cookie_ASPSESSIONIDValue = string.Empty;
         private string cookie_month_champion = string.Empty;
-
-        private string CustomerMoblie = string.Empty;
 
         // __cfduid=d2003215804a6ba74df96de4bad4eb6251480646889
         //ASP.NET_SessionId=g121cj1fgk2wwed2z4vnegz0
@@ -63,6 +61,7 @@ namespace 会员管理
                 setCookie4();
                 GetCustomerList();
                 getSaleListCookie();
+             // textBox1.Text=  MatchMobile(textBox1.Text).ToString();
             }catch(Exception ex)
             {
                 log(ex.ToString());
@@ -275,7 +274,7 @@ namespace 会员管理
                 reader.Close();
                 responseStream.Close();
 
-                webBrowser1.DocumentText = content;
+                //webBrowser1.DocumentText = content;
 
                 string trPattern = @"<tr>[\s\S]*?</tr>";
                 //第一个tr是搜索，第二个tr才是客户信息
@@ -312,15 +311,28 @@ namespace 会员管理
 
                 string str = "已获取到最新用户列表信息";
                 log(str);
-
+                if (string.IsNullOrEmpty(strMobile))
+                {
+                    log("发现手机号码为空的客户");
+                    return;
+                }
                 if (string.IsNullOrEmpty(strKefu))//没人认领的新用户，马上启动录入
                 {
                     log("发现新客户：" + strMobile + "开始添加客户");
-                    CustomerMoblie = strMobile;
+                    txtResult.Text += "发现新客户：" + strMobile + "开始添加客户"+System.Environment.NewLine;
                     try
                     {
-                        AddCustomer();
-                        log("添加新客户：" + strMobile + "成功！");
+                        if (MatchMobile(strMobile))
+                        {
+                            AddCustomer(strMobile);
+                            log("添加新客户：" + strMobile + "成功！");
+                            txtResult.Text += "添加新客户：" + strMobile + "成功！"+ System.Environment.NewLine;
+                        }
+                        else
+                        {
+                            log("验证用户手机号码失败：" + strMobile);
+                            txtResult.Text += "验证用户手机号码失败：" + strMobile + System.Environment.NewLine;
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -328,13 +340,17 @@ namespace 会员管理
                     }
                     finally
                     {
-                        CustomerMoblie = string.Empty;
+                        //CustomerMoblie = string.Empty;
                     }
                 }
             }catch(Exception ex)
             {
                 log(ex.ToString());
             }
+        }
+        private bool MatchMobile(string mobile)
+        {
+            return Regex.IsMatch(mobile, @"^(0|86|17951)?(13[0-9]|15[012356789]|17[013678]|18[0-9]|14[57])[0-9]{8}$");
         }
 
         private void log(string str)
@@ -400,7 +416,7 @@ namespace 会员管理
         }
 
         //第六步，添加客户列表信息
-        private void AddCustomer()
+        private void AddCustomer(string CustomerMoblie)
         {
             string url = "http://portal.idcicp.com/customer/add.aspx";
 
@@ -429,7 +445,10 @@ namespace 会员管理
             myRequest.CookieContainer = new CookieContainer();
             myRequest.CookieContainer.Add(cks);
 
-
+            if(string.IsNullOrEmpty(CustomerMoblie))
+            {
+                return;
+            }
 
             string requestBody = "custname=a&custcontactname=a&custorderfor=%E5%9F%9F%E5%90%8D%E4%BA%A7%E5%93%81&type2=%E5%9F%9F%E5%90%8D%E4%BA%A7%E5%93%81&sel_CustT_Name=0&custmembername=&custmoblie=" + CustomerMoblie + "&custtel=&custqq=&custwechat=&custemail="; ;
 
@@ -448,7 +467,7 @@ namespace 会员管理
             string content = reader.ReadToEnd();
             reader.Close();
             responseStream.Close();
-            webBrowser1.DocumentText = content;
+            //webBrowser1.DocumentText = content;
         }
 
         public class ACCESS_TOKEN
@@ -460,13 +479,15 @@ namespace 会员管理
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            webBrowser1.ScriptErrorsSuppressed = true;
+            //webBrowser1.ScriptErrorsSuppressed = true;
             //pictureBox1.ImageLocation = "http://portal.idcicp.com/tools/Verify_code.ashx";
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             timer1.Start();
+            btnRefresh.Enabled = false;
+           
         }
 
         private string labMsg = string.Empty;

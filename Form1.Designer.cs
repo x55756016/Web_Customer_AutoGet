@@ -32,12 +32,12 @@
             this.button1 = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.label1 = new System.Windows.Forms.Label();
             this.txtMsg = new System.Windows.Forms.TextBox();
             this.txtParmater = new System.Windows.Forms.TextBox();
+            this.txtResult = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -66,21 +66,13 @@
             this.textBox1.Size = new System.Drawing.Size(203, 21);
             this.textBox1.TabIndex = 2;
             // 
-            // webBrowser1
-            // 
-            this.webBrowser1.Location = new System.Drawing.Point(21, 98);
-            this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
-            this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(420, 178);
-            this.webBrowser1.TabIndex = 3;
-            // 
             // btnRefresh
             // 
             this.btnRefresh.Location = new System.Drawing.Point(713, 34);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(112, 23);
             this.btnRefresh.TabIndex = 0;
-            this.btnRefresh.Text = "开始刷新（3s）";
+            this.btnRefresh.Text = "开始刷新";
             this.btnRefresh.UseVisualStyleBackColor = true;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
@@ -109,18 +101,26 @@
             this.txtParmater.Location = new System.Drawing.Point(512, 98);
             this.txtParmater.Multiline = true;
             this.txtParmater.Name = "txtParmater";
-            this.txtParmater.Size = new System.Drawing.Size(566, 178);
+            this.txtParmater.Size = new System.Drawing.Size(713, 178);
             this.txtParmater.TabIndex = 6;
+            // 
+            // txtResult
+            // 
+            this.txtResult.Location = new System.Drawing.Point(21, 98);
+            this.txtResult.Multiline = true;
+            this.txtResult.Name = "txtResult";
+            this.txtResult.Size = new System.Drawing.Size(466, 178);
+            this.txtResult.TabIndex = 6;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1309, 762);
+            this.Controls.Add(this.txtResult);
             this.Controls.Add(this.txtParmater);
             this.Controls.Add(this.txtMsg);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.webBrowser1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.btnRefresh);
@@ -139,12 +139,12 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.WebBrowser webBrowser1;
         private System.Windows.Forms.Button btnRefresh;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtMsg;
         private System.Windows.Forms.TextBox txtParmater;
+        private System.Windows.Forms.TextBox txtResult;
     }
 }
 
